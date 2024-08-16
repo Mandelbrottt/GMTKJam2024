@@ -321,10 +321,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debugPrint: 0
   enableGrav: 0
-  lateralThrust: 50
+  lateralThrust: 250
   accelationLimit: 1
   _rotationalSnapStrength: 3
   _rotationalSensitivity: 0.5
+  _horizontalRotationSpeedScaling: 0.1
+  VerticalGravity: 9.81
+  HorizontalGravity: 1
   _rb: {fileID: 400393552}
   _input: {fileID: 400393554}
 --- !u!1 &614199948

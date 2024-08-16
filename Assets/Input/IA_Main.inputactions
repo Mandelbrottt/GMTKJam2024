@@ -59,39 +59,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Keyboard",
-                    "id": "0204b24d-b863-4f41-ac27-5d14dcccb55f",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement Direction",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "77e22c32-4b35-4def-901a-cd0883320738",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "b28613f2-ea79-4b5a-8048-8f0504557460",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "Controller",
                     "id": "d41f0578-bcee-4440-b5ed-20f0a38021e9",
                     "path": "3DVector",
@@ -105,9 +72,9 @@
                 {
                     "name": "up",
                     "id": "2bf3b5a2-4b2b-41a3-85a0-76add7f7e00a",
-                    "path": "<Gamepad>/rightStick/right",
+                    "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=0.25)",
                     "groups": "",
                     "action": "Look Direction",
                     "isComposite": false,
@@ -116,9 +83,9 @@
                 {
                     "name": "down",
                     "id": "fc264f25-d1dd-449c-a280-17596602b77d",
-                    "path": "<Gamepad>/rightStick/left",
+                    "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "Scale(factor=0.25)",
                     "groups": "",
                     "action": "Look Direction",
                     "isComposite": false,
@@ -127,7 +94,7 @@
                 {
                     "name": "left",
                     "id": "f14bc157-4217-4428-a520-1547dbda7868",
-                    "path": "<Gamepad>/rightStick/up",
+                    "path": "<Gamepad>/rightStick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -138,7 +105,7 @@
                 {
                     "name": "right",
                     "id": "b778ef99-573f-4935-8eeb-9f4fcf9776ca",
-                    "path": "<Gamepad>/rightStick/down",
+                    "path": "<Gamepad>/rightStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -149,7 +116,7 @@
                 {
                     "name": "forward",
                     "id": "5e27e9a4-99ae-4ab7-bf8d-06ad2cfc9269",
-                    "path": "<Gamepad>/rightStickPress",
+                    "path": "<Gamepad>/rightStick/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -160,84 +127,7 @@
                 {
                     "name": "backward",
                     "id": "08f8b7f2-47e9-47ec-a257-a891b84d1d87",
-                    "path": "<Gamepad>/leftStickPress",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Keyboard",
-                    "id": "26353018-ebc9-4d84-a9b1-6c6a6832b965",
-                    "path": "3DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "13f20162-9d07-4faf-a60c-f733f25db13c",
-                    "path": "<Mouse>/delta/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "e30f6d42-77d0-44d8-b377-b95f4da7585f",
-                    "path": "<Mouse>/delta/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "83b9351b-5ddf-4f7b-bc75-01daaacbfc6d",
-                    "path": "<Mouse>/delta/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "8adcb373-9998-4e04-b4f3-5c9cf9b90b5f",
-                    "path": "<Mouse>/delta/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "forward",
-                    "id": "e4b3f549-ac39-410f-8141-4f73cd26642a",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "backward",
-                    "id": "af15698f-0bbd-41f5-90f1-bc379235cd7a",
-                    "path": "<Keyboard>/e",
+                    "path": "<Gamepad>/rightStick/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

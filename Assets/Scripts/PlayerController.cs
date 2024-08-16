@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float _rotationalSnapStrength = 3f;
     [SerializeField] float _rotationalSensitivity = 0.05f;
+    [SerializeField] float _horizontalRotationSpeedScaling = 0.1f;
+
+    [SerializeField] float VerticalGravity = 9.81f;
+    [SerializeField] float HorizontalGravity = 3f;
     #endregion
     #region Serialized References
     [Header("Serialized References")]
@@ -28,6 +32,7 @@ public class PlayerController : MonoBehaviour
     #region Internal Values
 
     Quaternion _desiredRotation;
+    float _gravity;
 
     #region Input Values
 
@@ -54,6 +59,8 @@ public class PlayerController : MonoBehaviour
     {
         RotateShip();
 
+        UpdateGravity();
+
         if (debugPrint)
         {
             Debug.Log("Left: " + i_MovementMagnitude + " Right: " + i_RotationDirection);
@@ -71,8 +78,9 @@ public class PlayerController : MonoBehaviour
 
         if (enableGrav)
         {
-            Vector3 grav = new Vector3(0, _rb.mass * -9.81f * Time.deltaTime, 0);
+            Vector3 grav = new Vector3(0, _rb.mass * -_gravity * Time.deltaTime, 0);
             grav = transform.InverseTransformDirection(grav);
+            Debug.Log(grav);
             TargetVelocity += grav;
         }
 
@@ -89,9 +97,17 @@ public class PlayerController : MonoBehaviour
 
     void RotateShip()
     {
+        //Trying to scale the yaw rotation, but it's whacky.
+        //Doing it as an input processor instead now.
+        //i_RotationDirection.y *= _horizontalRotationSpeedScaling;
         Quaternion inputRotation = Quaternion.Euler(i_RotationDirection * _rotationalSensitivity);
         _desiredRotation = _desiredRotation * inputRotation;
         transform.rotation = Quaternion.SlerpUnclamped(transform.rotation, _desiredRotation, Time.deltaTime * _rotationalSnapStrength);
+    }
+
+    void UpdateGravity()
+    {
+        _gravity = Mathf.Lerp(HorizontalGravity, VerticalGravity, Mathf.Abs(Vector3.Dot(Vector3.up, transform.forward)));
     }
 
     #region Input Signals
