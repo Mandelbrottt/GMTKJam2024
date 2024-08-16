@@ -14,9 +14,9 @@ jobs:
           - WebGL
         include:
           - targetPlatform: StandaloneWindows64
-            image: unityci/editor:windows-2022.3.42f1-base-3.1.0
+            image: unityci/editor-windows-2022.3.42f1-base-3.1.0
           - targetPlatform: WebGL
-            image: unityci/editor:ubuntu-2022.3.42f1-webgl-3.1.0
+            image: unityci/editor-ubuntu-2022.3.42f1-webgl-3.1.0
     steps:
     - uses: actions/checkout@v4
       with:
