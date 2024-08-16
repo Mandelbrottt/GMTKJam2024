@@ -1,0 +1,44 @@
+name: Build Project
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build for ${matrix.targetPlatform}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        targetPlatform:
+          - WebGL
+          - StandaloneWindows64
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - if: ${{ runner.os == 'Windows' }}
+      name: Use GNU tar
+      shell: cmd
+      run: |
+        echo "Adding GNU tar to PATH"
+        echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+    - uses: actions/cache@v4
+      with:
+        path: Library
+        key: Library-${{matrix.targetPlatform}}
+        restore-keys: |
+          Library-
+    - uses: game-ci/unity-builder@v4
+      env:
+        UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      with:
+        targetPlatform: ${{matrix.targetPlatform}}
+        versioning: 'Semantic'
+        customImage: 'unityci/editor:windows-2022.3.42f1-base-3.1.0'
+    - uses: actions/upload-artifact@v3
+      if: github.ref == 'refs/heads/master'
+      with:
+        name: Build-${{ matrix.targetPlatform }}
+        path: build/${{ matrix.targetPlatform }}
