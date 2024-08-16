@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Build for ${matrix.targetPlatform}
+    name: Build for ${{matrix.targetPlatform}}
     runs-on: windows-latest
     strategy:
       fail-fast: true
