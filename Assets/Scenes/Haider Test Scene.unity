@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400393553}
   - component: {fileID: 400393555}
+  - component: {fileID: 400393556}
   - component: {fileID: 400393554}
   - component: {fileID: 400393552}
   m_Layer: 0
@@ -330,6 +331,24 @@ MonoBehaviour:
   HorizontalGravity: 1
   _rb: {fileID: 400393552}
   _input: {fileID: 400393554}
+--- !u!114 &400393556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400393550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067295c232ac80f4ea8b9e36381c9518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pelletFireRate: 0.1
+  missileFireRate: 1.5
+  missileAmmoCapacity: 10
+  playerInput: {fileID: 400393554}
+  rigidBody: {fileID: 0}
+  pellet: {fileID: 3022453036919015877, guid: 636580f689b982741ba10c5acb3de477, type: 3}
 --- !u!1 &614199948
 GameObject:
   m_ObjectHideFlags: 0

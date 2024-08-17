@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Fire Pellet",
+                    "type": "Value",
+                    "id": "77a5cff9-f505-49fc-ad94-457f894298ee",
+                    "expectedControlType": "Analog",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -134,6 +143,17 @@
                     "action": "Look Direction",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "de62eab8-a9f5-4af5-99e2-06c15696d599",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire Pellet",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
