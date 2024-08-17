@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour
     #region Serialized References
     [Header("Serialized References")]
     [SerializeField] Rigidbody _rb;
-    [SerializeField] Camera _camera;
+    [SerializeField] CinemachineVirtualCamera _camera;
     [SerializeField] PlayerInput _input;
     #endregion
     #region Internal Values
@@ -51,7 +52,6 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _input = GetComponent<PlayerInput>();
-        _camera = GetComponentInChildren<Camera>();
     }
 
     void Start()
@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
     void FovMAXXER()
     {
-        _camera.fieldOfView = Mathf.SmoothStep(startingFov, startingFov + FOVIncrease, _rb.velocity.magnitude / MaxSpeedForCamera);
+        _camera.m_Lens.FieldOfView = Mathf.SmoothStep(startingFov, startingFov + FOVIncrease, _rb.velocity.magnitude / MaxSpeedForCamera);
     }
 
     void UpdateGravity()
@@ -150,6 +150,5 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _input = GetComponent<PlayerInput>();
-        _camera = GetComponentInChildren<Camera>();
     }
 }
