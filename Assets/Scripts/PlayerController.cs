@@ -72,15 +72,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        RotateShip();
-
+        //RotateShip();
         UpdateGravity();
-
-        if (debugPrint)
-        {
-            Debug.Log("Velcity: " + _rb.velocity.magnitude);
-        }
-
         FovMAXXER();
         UpdateThrottle();
 
@@ -91,12 +84,13 @@ public class PlayerController : MonoBehaviour
             _boosted = false;
         }
 
-        Debug.Log("Timer: " + _boostTimer + " Boosted: " + _boosted);
+        Debug.Log("Velocity " + _rb.velocity);
     }
 
     void FixedUpdate()
     {
         Movement();
+        RotateShip();
     }
 
     void Movement()
@@ -138,7 +132,12 @@ public class PlayerController : MonoBehaviour
         //Trying to scale the yaw rotation, but it's whacky.
         //Doing it as an input processor instead now.
         //i_RotationDirection.y *= _horizontalRotationSpeedScaling;
-        Quaternion inputRotation = Quaternion.Euler(i_RotationDirection * _rotationalSensitivity);
+
+        //Scale rot sens with velocity.
+
+        float SpeedScalar = minSpeedForGrav / (_rb.velocity.magnitude + 0.01f);
+
+        Quaternion inputRotation = Quaternion.Euler(i_RotationDirection * _rotationalSensitivity * SpeedScalar);
         _desiredRotation = _desiredRotation * inputRotation;
         transform.rotation = Quaternion.SlerpUnclamped(transform.rotation, _desiredRotation, Time.deltaTime * _rotationalSnapStrength);
     }
