@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,23 +17,37 @@ public class PlayerController : MonoBehaviour
     //[SerializeField] float verticalThrust = 600;
     [SerializeField] float accelationLimit = 10;
 
+    [SerializeField] float minSpeedForGrav = 10;
+
     [SerializeField] float _rotationalSnapStrength = 3f;
     [SerializeField] float _rotationalSensitivity = 0.05f;
-    [SerializeField] float _horizontalRotationSpeedScaling = 0.1f;
 
     [SerializeField] float VerticalGravity = 9.81f;
     [SerializeField] float HorizontalGravity = 3f;
+
+    [SerializeField] float startingFov = 63.0f;
+    [SerializeField] float FOVIncrease = 15.0f;
+    [SerializeField] float MaxSpeedForCamera = 50.0f;
+
+    [SerializeField] float ThrottleDelta = 0.05f;
+    [SerializeField] float ThrottleBoostScalar = 2.5f;
+    [SerializeField] float BoostTime = 3.0f;
+    [SerializeField] float BoostCooldown = 10.0f;
     #endregion
     #region Serialized References
     [Header("Serialized References")]
     [SerializeField] Rigidbody _rb;
-    //[SerializeField] Camera _camera;
+    [SerializeField] CinemachineVirtualCamera _camera;
     [SerializeField] PlayerInput _input;
     #endregion
     #region Internal Values
 
     Quaternion _desiredRotation;
     float _gravity;
+    float _throttle;
+
+    bool _boosted;
+    float _boostTimer = 100;
 
     #region Input Values
 
@@ -63,8 +78,20 @@ public class PlayerController : MonoBehaviour
 
         if (debugPrint)
         {
-            Debug.Log("Left: " + i_MovementMagnitude + " Right: " + i_RotationDirection);
+            Debug.Log("Velcity: " + _rb.velocity.magnitude);
         }
+
+        FovMAXXER();
+        UpdateThrottle();
+
+        float OldBoostTime = _boostTimer;
+        _boostTimer += Time.deltaTime;
+        if (OldBoostTime <= 0 && _boostTimer > 0) //The Boost Timer just crossed zero
+        {
+            _boosted = false;
+        }
+
+        Debug.Log("Timer: " + _boostTimer + " Boosted: " + _boosted);
     }
 
     void FixedUpdate()
@@ -74,13 +101,24 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        Vector3 TargetVelocity = new Vector3(0, 0, i_MovementMagnitude * lateralThrust); //This velocity is in local space
+        Vector3 TargetVelocity = new Vector3(0, 0, _throttle * lateralThrust); //This velocity is in local space
 
         if (enableGrav)
         {
             Vector3 grav = new Vector3(0, _rb.mass * -_gravity * Time.deltaTime, 0);
             grav = transform.InverseTransformDirection(grav);
-            Debug.Log(grav);
+            
+            if(_rb.velocity.magnitude < minSpeedForGrav)
+            {
+                grav = Vector3.Slerp(grav, Vector3.zero, _rb.velocity.magnitude / minSpeedForGrav);
+            }
+
+            else
+            {
+                grav = Vector3.zero;
+            }
+
+            //Debug.Log(grav.magnitude);
             TargetVelocity += grav;
         }
 
@@ -105,9 +143,34 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.SlerpUnclamped(transform.rotation, _desiredRotation, Time.deltaTime * _rotationalSnapStrength);
     }
 
+    void FovMAXXER()
+    {
+        _camera.m_Lens.FieldOfView = Mathf.SmoothStep(startingFov, startingFov + FOVIncrease, _rb.velocity.magnitude / MaxSpeedForCamera);
+    }
+
     void UpdateGravity()
     {
         _gravity = Mathf.Lerp(HorizontalGravity, VerticalGravity, Mathf.Abs(Vector3.Dot(Vector3.up, transform.forward)));
+    }
+
+    void UpdateThrottle()
+    {
+        _throttle += ThrottleDelta * i_MovementMagnitude * Time.deltaTime;
+        _throttle = Mathf.Clamp(_throttle, 0.0f, 1.0f);
+
+        if (_boosted)
+        {
+            _throttle *= ThrottleBoostScalar;
+        }
+    }
+
+    public void OnBoost()
+    {
+        if(_boostTimer > BoostCooldown)
+        {
+            _boosted = true;
+            _boostTimer = 0 - BoostTime; //Account for the time of the boost
+        }
     }
 
     #region Input Signals
