@@ -3,50 +3,70 @@ using UnityEngine.InputSystem;
 
 public class PlayerWeaponController : MonoBehaviour {
 	[Header("Weapon Properties")]
-	[SerializeField] float pelletFireRate = 0.1f;
-	[SerializeField] float missileFireRate = 1.5f;
+	[SerializeField] float bulletFireRate = 0.1f;
+	[SerializeField] float missileFireRate = 2.5f;
 	[SerializeField] int missileAmmoCapacity = 10;
 
 	[Header("Serialized References")]
 	[SerializeField] PlayerInput playerInput;
 	[SerializeField] Rigidbody rigidBody;
-	[SerializeField] Transform leftPelletBarrel;
-	[SerializeField] Transform rightPelletBarrel;
-	[SerializeField] GameObject pellet;
+	[SerializeField] Transform leftButlletBarrel;
+	[SerializeField] Transform rightBulletBarrel;
+	[SerializeField] Transform missileBarrel;
+	[SerializeField] GameObject bullet;
+	[SerializeField] GameObject missile;
 
-	private float pelletInputMag = 0.0f;
+	private float bulletInputMag = 0.0f;
 	private float missileInputMag = 0.0f;
 
-	private float pelletCooldown = 0.0f;
+	private float bulletCooldown = 0.0f;
 	private float missileCooldown = 0.0f;
 
-	private bool useRightPelletBarrel = false;
+	private int curMissileAmmo = 0;
+	private bool useRightBarrel = false;
 
 	private void Awake() {
 		playerInput = GetComponent<PlayerInput>();
 		rigidBody = GetComponent<Rigidbody>();
+		curMissileAmmo = missileAmmoCapacity;
 	}
 
 	private void Update() {
-		if (pelletInputMag >= 0.5f && pelletCooldown <= 0.0f) {
-			pelletCooldown = pelletFireRate;
+		if (bulletInputMag >= 0.2f && bulletCooldown <= 0.0f) {
+			bulletCooldown = bulletFireRate;
 
-			Vector3 _position = leftPelletBarrel.position;
-			if (useRightPelletBarrel)
-				_position = rightPelletBarrel.position;
-			useRightPelletBarrel = !useRightPelletBarrel;
+			Vector3 _position = leftButlletBarrel.position;
+			if (useRightBarrel)
+				_position = rightBulletBarrel.position;
+			useRightBarrel = !useRightBarrel;
 
-			PlayerProjectile _pellet = Instantiate(pellet).GetComponent<PlayerProjectile>();
-			_pellet.OnFire(_position, rigidBody.velocity, transform.rotation);
+			PlayerProjectile _bullet = Instantiate(bullet).GetComponent<PlayerProjectile>();
+			_bullet.OnFire(_position, rigidBody.velocity, transform.rotation);
+		}
+
+		if (curMissileAmmo > 0 && missileInputMag >= 0.2f && missileCooldown <= 0.0f) {
+			missileCooldown = missileFireRate;
+
+			PlayerProjectile _missile = Instantiate(missile).GetComponent<PlayerProjectile>();
+			_missile.OnFire(missileBarrel.position, rigidBody.velocity, transform.rotation);
+
+			curMissileAmmo--;
 		}
 	}
 
 	private void FixedUpdate() {
-		if (pelletCooldown > 0.0f)
-			pelletCooldown -= Time.deltaTime;
+		if (bulletCooldown > 0.0f)
+			bulletCooldown -= Time.deltaTime;
+
+		if (missileCooldown > 0.0f)
+			missileCooldown -= Time.deltaTime;
 	}
 
-	public void OnFirePellet() {
-		pelletInputMag = playerInput.actions["Fire Pellet"].ReadValue<float>();
+	public void OnFireBullet() {
+		bulletInputMag = playerInput.actions["Fire Bullet"].ReadValue<float>();
+	}
+
+	public void OnFireMissile() {
+		missileInputMag = playerInput.actions["Fire Missile"].ReadValue<float>();
 	}
 }

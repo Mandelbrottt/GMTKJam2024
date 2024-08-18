@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerProjectile : MonoBehaviour {
@@ -18,7 +18,6 @@ public class PlayerProjectile : MonoBehaviour {
     [SerializeField] Rigidbody rigidBody;
     [SerializeField] LayerMask lockOnLayer;
 
-    private GameObject targetObject;
     private Vector3 shipVelocity;
 
     private void Awake() {
@@ -26,14 +25,13 @@ public class PlayerProjectile : MonoBehaviour {
         rigidBody = GetComponent<Rigidbody>();
     }
 
-	private void Update() {
-		lifespan -= Time.deltaTime;
+	private void FixedUpdate() {
+        lifespan -= Time.deltaTime;
         if (lifespan <= 0.0f) {
             Destroy(gameObject);
+            return;
         }
-    }
 
-	private void FixedUpdate() {
 		rigidBody.MovePosition(transform.position + Time.deltaTime * shipVelocity);
 	}
 
@@ -41,15 +39,23 @@ public class PlayerProjectile : MonoBehaviour {
         meshRenderer.material.color = color;
         transform.position = _position;
         transform.rotation = _rotation * Quaternion.Euler(0.0f, 90.0f, 90.0f);
-        shipVelocity = _velocity + transform.up * velocity;
 
-        if (Physics.SphereCast(transform.position, autoAimRadius, transform.up, out RaycastHit hit, autoAimRange, lockOnLayer)) {
-            targetObject = hit.collider.gameObject;
-            Debug.Log("TEST");
+        if (Physics.SphereCast(transform.position, autoAimRadius, transform.up, out RaycastHit _hit, autoAimRange, lockOnLayer)) {
+            GameObject _target = _hit.collider.gameObject;
+            Vector3 _direction = Quaternion.LookRotation(_target.transform.position - transform.position).eulerAngles;
+            transform.rotation = Quaternion.Euler(_direction) * Quaternion.Euler(0.0f, 90.0f, 90.0f);
         }
+
+        transform.rotation *= Quaternion.Euler(0.0f, 0.0f, Random.Range(-accuracy, accuracy));
+
+        shipVelocity = _velocity + transform.up * velocity;
     }
 
-	private void OnDrawGizmos() {
+	private void OnCollisionEnter(Collision _collision) {
+		Destroy(gameObject);
+    }
+
+    private void OnDrawGizmos() {
 		Gizmos.color = Color.red;
         Gizmos.DrawSphere(transform.position + transform.up * autoAimRange, autoAimRadius);
 	}
