@@ -28,6 +28,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float startingFov = 63.0f;
     [SerializeField] float FOVIncrease = 15.0f;
     [SerializeField] float MaxSpeedForCamera = 50.0f;
+
+    [SerializeField] float ThrottleDelta = 0.05f;
+    [SerializeField] float ThrottleBoostScalar = 2.5f;
+    [SerializeField] float BoostTime = 3.0f;
+    [SerializeField] float BoostCooldown = 10.0f;
     #endregion
     #region Serialized References
     [Header("Serialized References")]
@@ -39,6 +44,10 @@ public class PlayerController : MonoBehaviour
 
     Quaternion _desiredRotation;
     float _gravity;
+    float _throttle;
+
+    bool _boosted;
+    float _boostTimer = 100;
 
     #region Input Values
 
@@ -73,6 +82,16 @@ public class PlayerController : MonoBehaviour
         }
 
         FovMAXXER();
+        UpdateThrottle();
+
+        float OldBoostTime = _boostTimer;
+        _boostTimer += Time.deltaTime;
+        if (OldBoostTime <= 0 && _boostTimer > 0) //The Boost Timer just crossed zero
+        {
+            _boosted = false;
+        }
+
+        Debug.Log("Timer: " + _boostTimer + " Boosted: " + _boosted);
     }
 
     void FixedUpdate()
@@ -82,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        Vector3 TargetVelocity = new Vector3(0, 0, i_MovementMagnitude * lateralThrust); //This velocity is in local space
+        Vector3 TargetVelocity = new Vector3(0, 0, _throttle * lateralThrust); //This velocity is in local space
 
         if (enableGrav)
         {
@@ -99,7 +118,7 @@ public class PlayerController : MonoBehaviour
                 grav = Vector3.zero;
             }
 
-            Debug.Log(grav.magnitude);
+            //Debug.Log(grav.magnitude);
             TargetVelocity += grav;
         }
 
@@ -132,6 +151,26 @@ public class PlayerController : MonoBehaviour
     void UpdateGravity()
     {
         _gravity = Mathf.Lerp(HorizontalGravity, VerticalGravity, Mathf.Abs(Vector3.Dot(Vector3.up, transform.forward)));
+    }
+
+    void UpdateThrottle()
+    {
+        _throttle += ThrottleDelta * i_MovementMagnitude * Time.deltaTime;
+        _throttle = Mathf.Clamp(_throttle, 0.0f, 1.0f);
+
+        if (_boosted)
+        {
+            _throttle *= ThrottleBoostScalar;
+        }
+    }
+
+    public void OnBoost()
+    {
+        if(_boostTimer > BoostCooldown)
+        {
+            _boosted = true;
+            _boostTimer = 0 - BoostTime; //Account for the time of the boost
+        }
     }
 
     #region Input Signals
