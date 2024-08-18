@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviour
 
     bool _boosted;
     float _boostTimer = 100;
+    public Vector3 externalForce;
 
     #region Input Values
 
@@ -68,6 +69,8 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _desiredRotation = transform.rotation;
+
+        _throttle = 0.7f;
     }
 
     void Update()
@@ -83,8 +86,6 @@ public class PlayerController : MonoBehaviour
         {
             _boosted = false;
         }
-
-        Debug.Log("Velocity " + _rb.velocity);
     }
 
     void FixedUpdate()
@@ -124,7 +125,11 @@ public class PlayerController : MonoBehaviour
         velocityChange.y = Mathf.Clamp(velocityChange.y, -accelationLimit, accelationLimit);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -accelationLimit, accelationLimit);
 
+        velocityChange += transform.InverseTransformVector(externalForce);
+
         _rb.AddRelativeForce(velocityChange, ForceMode.VelocityChange);
+
+        externalForce = Vector3.zero;
     }
 
     void RotateShip()
@@ -183,6 +188,11 @@ public class PlayerController : MonoBehaviour
         i_RotationDirection = _input.actions["Look Direction"].ReadValue<Vector3>();
     }
     #endregion
+
+    public void ExternalForceAdd(Vector3 force)
+    {
+        externalForce = force;
+    }
 
     void Reset()
     {
