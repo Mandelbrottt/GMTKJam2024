@@ -7,7 +7,7 @@ using System.Security.Principal;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+//using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class PlayerController : MonoBehaviour
 {
@@ -253,11 +253,15 @@ public class PlayerController : MonoBehaviour
     public void Damage(float damage)
     {
         Health -= damage;
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByNameWithLabel("Impact_Velocity", "Light");
+        plr_collision.Play();
+
         Debug.Log(Health);
 
         if (Health < 0)
         {
             PlayerDeath.Invoke();
+            plr_engine.Stop();
             GetComponentsInChildren<MeshRenderer>().ToList().ForEach(renderer => renderer.enabled = false);
         }
     }
