@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Principal;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
@@ -33,6 +34,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float ThrottleBoostScalar = 2.5f;
     [SerializeField] float BoostTime = 3.0f;
     [SerializeField] float BoostCooldown = 10.0f;
+
+    [SerializeField] float Health = 100;
+    [SerializeField] float collisionCooldown = 1;
+    [SerializeField] UnityEvent PlayerDeath;
     #endregion
     #region Serialized References
     [Header("Serialized References")]
@@ -48,6 +53,9 @@ public class PlayerController : MonoBehaviour
 
     bool _boosted;
     float _boostTimer = 100;
+    public Vector3 _externalForce;
+    float _collisionCooldown;
+    int _playerNum;
 
     #region Input Values
 
@@ -68,6 +76,10 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _desiredRotation = transform.rotation;
+
+        _throttle = 0.7f;
+
+        
     }
 
     void Update()
@@ -84,7 +96,7 @@ public class PlayerController : MonoBehaviour
             _boosted = false;
         }
 
-        Debug.Log("Velocity " + _rb.velocity);
+        _collisionCooldown -= Time.deltaTime;
     }
 
     void FixedUpdate()
@@ -124,7 +136,11 @@ public class PlayerController : MonoBehaviour
         velocityChange.y = Mathf.Clamp(velocityChange.y, -accelationLimit, accelationLimit);
         velocityChange.z = Mathf.Clamp(velocityChange.z, -accelationLimit, accelationLimit);
 
+        velocityChange += transform.InverseTransformVector(_externalForce);
+
         _rb.AddRelativeForce(velocityChange, ForceMode.VelocityChange);
+
+        _externalForce = Vector3.zero;
     }
 
     void RotateShip()
@@ -183,6 +199,52 @@ public class PlayerController : MonoBehaviour
         i_RotationDirection = _input.actions["Look Direction"].ReadValue<Vector3>();
     }
     #endregion
+
+    public void ExternalForceAdd(Vector3 force)
+    {
+        _externalForce = force;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(_collisionCooldown > 0)
+        {
+            return;
+        }
+        float force = collision.impulse.magnitude;
+        if(force < 10f)
+        {
+            Damage(2f);
+        } else if (force < 30f)
+        {
+            Damage(5f);
+        } else
+        {
+            Damage(10f);
+        }
+        _collisionCooldown = collisionCooldown;
+    }
+
+    public void Damage(float damage)
+    {
+        Health -= damage;
+        Debug.Log(Health);
+
+        if (Health < 0)
+        {
+            PlayerDeath.Invoke();
+        }
+    }
+
+    public float GetHealth()
+    {
+        return Health;
+    }
+
+    public void SetPlayerNumber(int number)
+    {
+        _playerNum = number;
+    }
 
     void Reset()
     {
