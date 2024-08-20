@@ -247,7 +247,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
@@ -1448,8 +1448,8 @@ MonoBehaviour:
   _rotationalSensitivity: 1.2
   VerticalGravity: 500
   HorizontalGravity: 150
-  startingFov: 23
-  FOVIncrease: 15
+  startingFov: 59
+  FOVIncrease: 40
   MaxSpeedForCamera: 50
   ThrottleDelta: 0.25
   ThrottleBoostScalar: 2.5
@@ -1756,6 +1756,14 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 6260498538526120649}
+    - target: {fileID: 6119915433749896185, guid: 38abdea2c0129644590b4543a8942c59, type: 3}
+      propertyPath: FOVIncrease
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6119915433749896185, guid: 38abdea2c0129644590b4543a8942c59, type: 3}
+      propertyPath: startingFov
+      value: 59
+      objectReference: {fileID: 0}
     - target: {fileID: 6119915433749896185, guid: 38abdea2c0129644590b4543a8942c59, type: 3}
       propertyPath: VerticalGravity
       value: 500
