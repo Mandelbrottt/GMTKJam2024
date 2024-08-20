@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class PlayerWeaponController : MonoBehaviour {
 	[Header("Weapon Properties")]
@@ -25,6 +26,11 @@ public class PlayerWeaponController : MonoBehaviour {
 	private int curMissileAmmo = 0;
 	private bool useRightBarrel = false;
 
+	[Space(10)]
+	[SerializeField] UnityEvent OnShootCannon;
+	[SerializeField] UnityEvent OnShootMissile;
+
+
 	private void Awake() {
 		playerInput = GetComponent<PlayerInput>();
 		rigidBody = GetComponent<Rigidbody>();
@@ -46,6 +52,7 @@ public class PlayerWeaponController : MonoBehaviour {
 
 			PlayerProjectile _bullet = Instantiate(bullet).GetComponent<PlayerProjectile>();
 			_bullet.OnFire(_position, rigidBody.velocity, transform.rotation);
+			OnShootCannon?.Invoke();
 		}
 
 		if (curMissileAmmo > 0 && missileInputMag >= 0.2f && missileCooldown <= 0.0f) {
@@ -53,6 +60,7 @@ public class PlayerWeaponController : MonoBehaviour {
 
 			PlayerProjectile _missile = Instantiate(missile).GetComponent<PlayerProjectile>();
 			_missile.OnFire(missileBarrel.position, rigidBody.velocity, transform.rotation);
+			OnShootMissile?.Invoke();
 
 			curMissileAmmo--;
 		}

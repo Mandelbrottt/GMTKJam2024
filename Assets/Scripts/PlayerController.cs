@@ -68,10 +68,14 @@ public class PlayerController : MonoBehaviour
     #endregion
     #endregion
 
+    [SerializeField] FMODUnity.StudioEventEmitter plr_collision;
+    [SerializeField] FMODUnity.StudioEventEmitter plr_engine;
+
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _input = GetComponent<PlayerInput>();
+        plr_engine.Play();
     }
 
     void Start()
@@ -144,6 +148,11 @@ public class PlayerController : MonoBehaviour
         velocityChange.z = Mathf.Clamp(velocityChange.z, -accelationLimit, accelationLimit);
 
         velocityChange += transform.InverseTransformVector(_externalForce);
+
+        float fmodVelocity = _rb.velocity.magnitude * 25.0f;
+
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("Velocity", fmodVelocity);
+
 
         _rb.AddRelativeForce(velocityChange, ForceMode.VelocityChange);
 
@@ -222,13 +231,22 @@ public class PlayerController : MonoBehaviour
         if(force < 10f)
         {
             Damage(2f);
+
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByNameWithLabel("Impact_Velocity", "Light");
+
         } else if (force < 30f)
         {
             Damage(5f);
+
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByNameWithLabel("Impact_Velocity", "Medium");
         } else
         {
             Damage(10f);
+
+            FMODUnity.RuntimeManager.StudioSystem.setParameterByNameWithLabel("Impact_Velocity", "Hard");
         }
+        plr_collision.Play();
+        
         _collisionCooldown = collisionCooldown;
     }
 
