@@ -9,6 +9,7 @@ public class GameMode : MonoBehaviour
 {
     public PlayerController P1;
     public PlayerController P2;
+    public Camera Camera;
 
     public Transform spawn1;
     public Transform spawn2;
@@ -25,11 +26,14 @@ public class GameMode : MonoBehaviour
         }
     }
 
+
+
     public int Join(PlayerController pc)
     {
         pc.PlayerDeath.AddListener(onDeath);
         if(P1 == null)
         {
+            Camera.gameObject.SetActive(false);
             Debug.Log("Spawn 1");
             P1 = pc;
             pc.gameObject.transform.position = spawn1.transform.position;
