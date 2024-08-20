@@ -122,19 +122,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  lifespan: 5
-  velocity: 65
-  accuracy: 2.5
-  ExplosiveForce: 100
-  ExplosionRadius: 30
+  lifespan: 15
+  velocity: 20
+  accuracy: 1
+  ExplosiveForce: 2000
+  ExplosionRadius: 50
   color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-  autoAimRange: 10
-  autoAimRadius: 2.5
+  autoAimRange: 10000
+  autoAimRadius: 2
   meshRenderer: {fileID: 8951144075408403967}
   rigidBody: {fileID: 8421941576384599240}
   lockOnLayer:
     serializedVersion: 2
     m_Bits: 64
+  Tracker: 1
+  propulsion: 1.01
 --- !u!54 &8421941576384599240
 Rigidbody:
   m_ObjectHideFlags: 0
