@@ -57,6 +57,8 @@ public class PlayerController : MonoBehaviour
     float _collisionCooldown;
     int _playerNum;
 
+    float _maxHitpoints;
+
     #region Input Values
 
     float i_MovementMagnitude = 0;
@@ -79,7 +81,7 @@ public class PlayerController : MonoBehaviour
 
         _throttle = 0.7f;
 
-        
+        _maxHitpoints = Health;   
     }
 
     void Update()
@@ -230,10 +232,16 @@ public class PlayerController : MonoBehaviour
         Health -= damage;
         Debug.Log(Health);
 
-        if (Health < 0)
+        if (Health <= 0)
         {
             PlayerDeath.Invoke();
         }
+    }
+
+    public void UpdateHealth(float _modifier) {
+        Health += Mathf.Abs(_modifier);
+        if (Health > _maxHitpoints)
+            Health = _maxHitpoints;
     }
 
     public float GetHealth()
@@ -251,4 +259,19 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _input = GetComponent<PlayerInput>();
     }
+
+	private void OnTriggerEnter(Collider other) {
+		if (other.gameObject.CompareTag("Pickup")) {
+            // Make sure there isn't an object/wall between the player and pickup before it gets collected.
+            Vector3 _direction = other.transform.position - gameObject.transform.position;
+            if (Physics.Raycast(gameObject.transform.position, _direction, Mathf.Infinity, 0))
+                return;
+
+            // Make sure the trigger has an ItemPickup attached to it. Otherwise, it cannot be collected.
+            ItemPickup _item = other.gameObject.GetComponent<ItemPickup>();
+            if (_item == null)
+                return;
+            _item.SetToCollect(gameObject);
+        }
+	}
 }

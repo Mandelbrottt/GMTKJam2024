@@ -64,4 +64,10 @@ public class PlayerWeaponController : MonoBehaviour {
         if (missileCooldown > 0.0f)
             missileCooldown -= Time.fixedDeltaTime;
     }
+
+	public void UpdateAmmoCount(int _amount) {
+		curMissileAmmo += Mathf.Abs(_amount);
+		if (curMissileAmmo > missileAmmoCapacity)
+			curMissileAmmo = missileAmmoCapacity;
+	}
 }
