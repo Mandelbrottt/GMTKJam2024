@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ public class Fan : MonoBehaviour
 {
     [SerializeField] float PushStrength = 80f;
 
+    [SerializeField] StudioEventEmitter fanBoost;
+
+
     private void OnTriggerStay(Collider other)
     {
         Debug.Log("In");
@@ -13,6 +17,7 @@ public class Fan : MonoBehaviour
         {
             Debug.Log("Fanned");
             other.gameObject.GetComponentInParent<PlayerController>().ExternalForceAdd(transform.up * PushStrength);
+            fanBoost.Play();
         }
     }
 }
