@@ -7,6 +7,8 @@ public class PlayerProjectile : MonoBehaviour {
     [SerializeField] float lifespan         = 2.5f;
     [SerializeField] float velocity         = 100.0f;
     [SerializeField] float accuracy         = 2.5f;
+    [SerializeField] float ExplosiveForce   = 30f;
+    [SerializeField] float ExplosionRadius  = 5.0f;
     [SerializeField] Color color            = Color.white;
 
     [Header("Auto-Aim Properties")]
@@ -52,6 +54,16 @@ public class PlayerProjectile : MonoBehaviour {
     }
 
 	private void OnCollisionEnter(Collision _collision) {
+        Rigidbody otherRB = _collision.gameObject.GetComponent<Rigidbody>();
+        if (otherRB != null)
+        {
+            otherRB.AddExplosionForce(ExplosiveForce, _collision.GetContact(0).point, ExplosionRadius);
+        }
+        PlayerController player = _collision.gameObject.GetComponent<PlayerController>();
+        if (player != null)
+        {
+            player.Damage(damage);
+        }
 		Destroy(gameObject);
     }
 

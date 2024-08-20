@@ -125,7 +125,9 @@ MonoBehaviour:
   lifespan: 5
   velocity: 65
   accuracy: 2.5
-  color: {r: 1, g: 0, b: 0, a: 1}
+  ExplosiveForce: 100
+  ExplosionRadius: 30
+  color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
   autoAimRange: 10
   autoAimRadius: 2.5
   meshRenderer: {fileID: 8951144075408403967}

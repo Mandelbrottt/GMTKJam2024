@@ -32,7 +32,11 @@ public class PlayerWeaponController : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (bulletInputMag >= 0.2f && bulletCooldown <= 0.0f) {
+        //Check inputs
+        missileInputMag = playerInput.actions["Fire Missile"].ReadValue<float>();
+        bulletInputMag = playerInput.actions["Fire Bullet"].ReadValue<float>();
+
+        if (bulletInputMag >= 0.2f && bulletCooldown <= 0.0f) {
 			bulletCooldown = bulletFireRate;
 
 			Vector3 _position = leftButlletBarrel.position;
@@ -52,21 +56,12 @@ public class PlayerWeaponController : MonoBehaviour {
 
 			curMissileAmmo--;
 		}
-	}
 
-	private void FixedUpdate() {
-		if (bulletCooldown > 0.0f)
-			bulletCooldown -= Time.deltaTime;
+        //Run Cooldowns
+        if (bulletCooldown > 0.0f)
+            bulletCooldown -= Time.fixedDeltaTime;
 
-		if (missileCooldown > 0.0f)
-			missileCooldown -= Time.deltaTime;
-	}
-
-	public void OnFireBullet() {
-		bulletInputMag = playerInput.actions["Fire Bullet"].ReadValue<float>();
-	}
-
-	public void OnFireMissile() {
-		missileInputMag = playerInput.actions["Fire Missile"].ReadValue<float>();
-	}
+        if (missileCooldown > 0.0f)
+            missileCooldown -= Time.fixedDeltaTime;
+    }
 }

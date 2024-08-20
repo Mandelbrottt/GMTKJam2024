@@ -24,7 +24,6 @@
                     "initialStateCheck": true
                 },
                 {
-<<<<<<< HEAD
                     "name": "Boost",
                     "type": "Button",
                     "id": "e1d7ce04-22ba-4980-9860-11119ac0f211",
@@ -32,24 +31,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-=======
+                },
+                {
                     "name": "Fire Bullet",
-                    "type": "Value",
-                    "id": "77a5cff9-f505-49fc-ad94-457f894298ee",
-                    "expectedControlType": "Analog",
+                    "type": "Button",
+                    "id": "57618fb4-c6d8-4b5b-bd3d-a825f2488c81",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Fire Missile",
-                    "type": "Value",
-                    "id": "85e16d8a-a59d-494a-a2ae-8adab0bd091d",
-                    "expectedControlType": "Analog",
+                    "type": "Button",
+                    "id": "47d3de38-f6d0-41dc-a8f4-fb0898430f62",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
->>>>>>> 7d0f5ec3cdbb52bf7ca24e2f085db4f214aa8764
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -165,16 +164,19 @@
                 },
                 {
                     "name": "",
-<<<<<<< HEAD
                     "id": "8d64d6db-238a-42c3-a29a-e4cf763a646d",
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Boost",
-=======
-                    "id": "de62eab8-a9f5-4af5-99e2-06c15696d599",
-                    "path": "<Gamepad>/rightTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1cd03a7-2770-474f-8dd4-525cf5d9ba02",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -184,13 +186,12 @@
                 },
                 {
                     "name": "",
-                    "id": "a37daaab-4b0c-418c-a900-3f86194ccc69",
-                    "path": "<Gamepad>/leftTrigger",
+                    "id": "f71206f9-4682-44dd-bf58-f571299ab35d",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Fire Missile",
->>>>>>> 7d0f5ec3cdbb52bf7ca24e2f085db4f214aa8764
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
