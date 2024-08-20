@@ -20,6 +20,9 @@ public class PlayerProjectile : MonoBehaviour {
     [SerializeField] Rigidbody rigidBody;
     [SerializeField] LayerMask lockOnLayer;
 
+    [SerializeField] bool Tracker;
+    [SerializeField] float propulsion;
+
     private Vector3 shipVelocity;
 
     private void Awake() {
@@ -35,6 +38,18 @@ public class PlayerProjectile : MonoBehaviour {
         }
 
 		rigidBody.MovePosition(transform.position + Time.deltaTime * shipVelocity);
+
+        if (Tracker)
+        {
+            if (Physics.SphereCast(transform.position, autoAimRadius, transform.up, out RaycastHit _hit, autoAimRange, lockOnLayer))
+            {
+                Debug.Log("Tracking");
+                GameObject _target = _hit.collider.gameObject;
+                Vector3 _direction = Quaternion.LookRotation(_target.transform.position - transform.position).eulerAngles;
+                transform.rotation = Quaternion.Euler(_direction) * Quaternion.Euler(0.0f, 90.0f, 90.0f);
+                shipVelocity *= propulsion;
+            }
+        }
 	}
 
 	public void OnFire(Vector3 _position, Vector3 _velocity, Quaternion _rotation) {
@@ -44,6 +59,7 @@ public class PlayerProjectile : MonoBehaviour {
 
         if (Physics.SphereCast(transform.position, autoAimRadius, transform.up, out RaycastHit _hit, autoAimRange, lockOnLayer)) {
             GameObject _target = _hit.collider.gameObject;
+            //target = _target.transform;
             Vector3 _direction = Quaternion.LookRotation(_target.transform.position - transform.position).eulerAngles;
             transform.rotation = Quaternion.Euler(_direction) * Quaternion.Euler(0.0f, 90.0f, 90.0f);
         }

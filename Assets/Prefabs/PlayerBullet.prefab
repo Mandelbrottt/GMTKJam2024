@@ -128,13 +128,16 @@ MonoBehaviour:
   ExplosiveForce: 30
   ExplosionRadius: 5
   color: {r: 1, g: 0.7882353, b: 0.16470589, a: 0}
-  autoAimRange: 35
-  autoAimRadius: 0.15
+  autoAimRange: 10000
+  autoAimRadius: 1
   meshRenderer: {fileID: 136605780149733528}
   rigidBody: {fileID: 6177538466304876722}
   lockOnLayer:
     serializedVersion: 2
     m_Bits: 64
+  Tracker: 0
+  trackStrength: 0
+  propulsion: 0
 --- !u!54 &6177538466304876722
 Rigidbody:
   m_ObjectHideFlags: 0

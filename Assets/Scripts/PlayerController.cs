@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Principal;
 using UnityEngine;
 using UnityEngine.Events;
@@ -37,7 +38,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float Health = 100;
     [SerializeField] float collisionCooldown = 1;
-    [SerializeField] UnityEvent PlayerDeath;
+    [SerializeField] public UnityEvent PlayerDeath;
+
     #endregion
     #region Serialized References
     [Header("Serialized References")]
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 _externalForce;
     float _collisionCooldown;
     int _playerNum;
+    GameMode _gameMode;
 
     #region Input Values
 
@@ -79,7 +82,9 @@ public class PlayerController : MonoBehaviour
 
         _throttle = 0.7f;
 
-        
+        Debug.Log("Joined");
+        _gameMode = FindAnyObjectByType<GameMode>();
+        _playerNum = _gameMode.Join(this);
     }
 
     void Update()
@@ -97,6 +102,8 @@ public class PlayerController : MonoBehaviour
         }
 
         _collisionCooldown -= Time.deltaTime;
+
+        Debug.Log("Speed: " + _rb.velocity.magnitude);
     }
 
     void FixedUpdate()
@@ -233,6 +240,7 @@ public class PlayerController : MonoBehaviour
         if (Health < 0)
         {
             PlayerDeath.Invoke();
+            GetComponentsInChildren<MeshRenderer>().ToList().ForEach(renderer => renderer.enabled = false);
         }
     }
 
